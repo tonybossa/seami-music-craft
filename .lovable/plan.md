@@ -1,91 +1,59 @@
 
 
-# SEAMI Music Production Support – Landing Page
+# Tính tổng giá & xác nhận trước khi gửi form
 
-## Tổng quan
-Landing page thu lead cho dịch vụ Sheet & Track của SEAMI. Phong cách **tối giản, sang trọng** — nền tối, typography mạnh, whitespace rộng. Form submit sẽ tạo task trên ClickUp.
+## Mô tả
+Khi khách chọn dịch vụ trong form, hệ thống sẽ tự động tính và hiển thị **tổng giá tạm tính** dựa trên nhóm khách hàng (SEAMI / Vãng lai). Khách phải **xác nhận giá** trước khi form được gửi đi.
 
-## Thiết kế
-- **Màu sắc**: Nền đen/xám đậm, text trắng, accent gold/warm — truyền tải "chuẩn nghề"
-- **Typography**: Headline lớn, bold, spacing rộng rãi
-- **Layout**: Single-page scroll, responsive mobile/desktop
-- **Hiệu ứng**: Subtle fade-in khi scroll, không lòe loẹt
+## Cách hoạt động
 
----
+1. **Chọn dịch vụ** -- mỗi khi tick/bỏ tick, tổng giá cập nhật ngay
+2. **Chuyển nhóm khách hàng** -- giá tự tính lại theo bảng giá tương ứng
+3. **Hiển thị bảng tổng kết** -- liệt kê từng dịch vụ đã chọn + giá + tổng cộng
+4. **Nút xác nhận** -- khách tick "Tôi đã xác nhận báo giá tạm tính" rồi mới bấm gửi được
+5. Dịch vụ có giá "thương lượng" hoặc "Không phục vụ" sẽ hiển thị rõ ràng, không cộng vào tổng số
 
-## Cấu trúc trang (8 sections)
+## Bảng giá tối thiểu (dùng trong code)
 
-### 1. Hero – Above the Fold
-- **Headline**: "Hỗ trợ Sheet & Track theo Chuẩn Nghề – Chuẩn SEAMI"
-- **Sub-headline**: "Dành cho người làm nhạc cần tài liệu dùng được ngay cho dạy học, tập band và biểu diễn."
-- **CTA chính**: Button "Gửi yêu cầu – Nhận tư vấn" → scroll đến form
-- **CTA phụ**: "Xem dịch vụ & giá" → scroll đến bảng giá
-
-### 2. Dịch vụ này dùng để làm gì? (Use Cases)
-3 cards sang trọng với icon:
-- **Dạy học**: Sheet & track đủ rõ để đứng lớp
-- **Tập band**: Phổ & track giúp band vào là tập
-- **Biểu diễn / Demo**: Tài liệu đủ chuẩn để diễn
-
-### 3. Ai nên dùng dịch vụ này? (Audience Filter)
-3 blocks ngang:
-- **GV/HV/Cựu HV SEAMI** — có badge "Ưu đãi nội bộ"
-- **Band / Người chơi nghiêm túc**
-- **Người làm nhạc bán chuyên / chuyên**
-
-### 4. Dịch vụ & Bảng Giá (Core Section)
-Hiển thị dạng bảng/accordion, dễ scan, 2 cột giá rõ ràng:
-
-**4.1 — SHEET & PHỔ**
-| Dịch vụ | GV/HV SEAMI | Khách vãng lai |
+| Dịch vụ | SEAMI | Khách vãng lai |
 |---|---|---|
-| Sheet giai điệu / chép lại | Từ 100.000đ – 48h | 150.000đ – 48h |
-| + Điền hợp âm | +50.000đ | +50.000đ |
-| Sheet piano / Tab guitar | Từ 300.000đ – 72h | Từ 400.000đ – 72h |
-| Phổ giản lược | Từ 400.000đ – 72h | Từ 600.000đ – 72h |
-| Tổng phổ nhạc nhẹ (4 nhạc cụ) | Từ 2.000.000đ – thương lượng | Từ 2.500.000đ – thương lượng |
-| Phổ hợp xướng SATB (4 voice) | Từ 1.500.000đ – 72h | Từ 2.000.000đ – 72h |
+| Sheet giai điệu / chép lại | 100,000 | 150,000 |
+| Dien hop am | 50,000 | 50,000 |
+| Sheet piano / Tab guitar | 300,000 | 400,000 |
+| Pho gian luoc | 400,000 | 600,000 |
+| Tong pho nhac nhe | 2,000,000 (thuong luong) | 2,500,000 (thuong luong) |
+| Pho hop xuong SATB | 1,500,000 | 2,000,000 |
+| Track 1-2 line | 500,000 | 800,000 |
+| Track full band | 2,000,000 (thuong luong) | 2,500,000 (thuong luong) |
+| Raw multitrack | 2,000,000 (thuong luong) | 2,500,000 (thuong luong) |
+| Tach vocal | 50,000 | null (khong phuc vu) |
+| Video guide melody | 80,000 | 100,000 |
 
-**4.2 — TRACK & MULTITRACK**
-| Dịch vụ | GV/HV SEAMI | Khách vãng lai |
-|---|---|---|
-| Track 1–2 line | Từ 500.000đ – 72h | Từ 800.000đ – 72h |
-| Track full band (4 nhạc cụ) | Từ 2.000.000đ – thương lượng | Từ 2.500.000đ – thương lượng |
-| Raw multitrack (4 nhạc cụ) | Từ 2.000.000đ – thương lượng | Từ 2.500.000đ – thương lượng |
+## Chi tiet ky thuat
 
-**4.3 — Hỗ trợ nhanh**
-| Dịch vụ | GV/HV SEAMI | Khách vãng lai |
-|---|---|---|
-| Tách vocal | 50.000đ – 24h | Không phục vụ |
-| Video guide melody | 80.000đ – 24h | 100.000đ – 24h |
+### Thay doi trong `FormSection.tsx`
 
-### 5. Chuẩn mực SEAMI (Why Us)
-- Bullet points: Đúng ngữ cảnh sử dụng / Vai trò nhạc cụ rõ ràng / File giao dùng được ngay
-- Quote block nổi bật: *"SEAMI không bán sheet hay track. SEAMI bán chuẩn làm nhạc."*
+1. **Them pricing map** -- object map tu ten dich vu sang `{ seami: number | null, guest: number | null, negotiable: boolean }`
 
-### 6. Ưu đãi & Chính sách
-- Giảm 10–20% mùa thấp điểm
-- Giảm 10% cho đơn từ 3 bài
-- Deadline rõ: 24h / 48h / 72h / thỏa thuận
+2. **Them ham `calculateTotal`** -- duyet qua `form.services`, tra gia theo `form.customerType`, cong tong. Tach rieng danh sach "thuong luong" va "khong phuc vu".
 
-### 7. Form gửi yêu cầu
-Các trường:
-- Họ tên (bắt buộc)
-- Số điện thoại (bắt buộc)
-- Nhóm khách hàng: GV/HV SEAMI | Khách vãng lai
-- Dịch vụ cần (multi-select từ danh sách đầy đủ)
-- Mục đích: Dạy học / Tập band / Biểu diễn / Demo
-- Deadline mong muốn
-- Ghi chú thêm
-- **CTA**: "Gửi yêu cầu – Nhận tư vấn từ SEAMI"
+3. **Them khu vuc hien thi gia** -- xuat hien khi `form.services.length > 0`:
+   - Danh sach tung dich vu da chon + gia tuong ung
+   - Ghi chu "Thuong luong" cho cac dich vu khong co gia co dinh
+   - Ghi chu "Khong phuc vu" neu khach vang lai chon "Tach vocal"
+   - Dong tong cong in dam, font lon
+   - Ghi chu "*Gia toi thieu, co the thay doi tuy do kho bai"
 
-### 8. Identity Claim (Footer)
-*"Không phải ai cũng cần. Chỉ dành cho người làm nhạc nghiêm túc."*
+4. **Them state `confirmed`** -- boolean, reset ve `false` moi khi `services` hoac `customerType` thay doi
 
----
+5. **Them checkbox xac nhan** -- "Toi da xem va dong y voi bao gia tam tinh nay"
 
-## Backend – ClickUp Integration
-- Supabase Edge Function nhận form data → gọi ClickUp API tạo task
-- Bạn sẽ cần cung cấp: **ClickUp API Key**, **List ID** để tôi cấu hình
-- Task trên ClickUp sẽ chứa toàn bộ thông tin lead (tên, SĐT, dịch vụ, mục đích, deadline, ghi chú)
+6. **Disable nut gui** -- khi `confirmed === false` hoac chua chon dich vu
+
+7. **Gui kem tong gia trong form data** -- body gui len edge function se co them `estimatedTotal` va `hasNegotiableItems` de hien thi tren ClickUp task
+
+### Thay doi trong edge function `create-clickup-task/index.ts`
+
+- Nhan them `estimatedTotal` va `hasNegotiableItems` tu body
+- Hien thi trong description cua ClickUp task: "Bao gia tam tinh: X dong" va ghi chu neu co hang muc thuong luong
 
