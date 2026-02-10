@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,9 +23,33 @@ const serviceOptions = [
 
 const purposeOptions = ["Dạy học", "Tập band", "Biểu diễn", "Demo"];
 
+type PriceInfo = {
+  seami: number | null;
+  guest: number | null;
+  negotiable: boolean;
+};
+
+const pricingMap: Record<string, PriceInfo> = {
+  "Sheet giai điệu / chép lại": { seami: 100000, guest: 150000, negotiable: false },
+  "Điền hợp âm": { seami: 50000, guest: 50000, negotiable: false },
+  "Sheet piano / Tab guitar": { seami: 300000, guest: 400000, negotiable: false },
+  "Phổ giản lược": { seami: 400000, guest: 600000, negotiable: false },
+  "Tổng phổ nhạc nhẹ": { seami: 2000000, guest: 2500000, negotiable: true },
+  "Phổ hợp xướng SATB": { seami: 1500000, guest: 2000000, negotiable: false },
+  "Track 1–2 line": { seami: 500000, guest: 800000, negotiable: false },
+  "Track full band": { seami: 2000000, guest: 2500000, negotiable: true },
+  "Raw multitrack": { seami: 2000000, guest: 2500000, negotiable: true },
+  "Tách vocal": { seami: 50000, guest: null, negotiable: false },
+  "Video guide melody": { seami: 80000, guest: 100000, negotiable: false },
+};
+
+const formatVND = (amount: number) =>
+  new Intl.NumberFormat("vi-VN").format(amount) + "đ";
+
 const FormSection = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -38,6 +62,37 @@ const FormSection = () => {
 
   const toggleItem = (arr: string[], item: string) =>
     arr.includes(item) ? arr.filter((i) => i !== item) : [...arr, item];
+
+  const updateServices = (services: string[]) => {
+    setForm({ ...form, services });
+    setConfirmed(false);
+  };
+
+  const updateCustomerType = (customerType: string) => {
+    setForm({ ...form, customerType });
+    setConfirmed(false);
+  };
+
+  const priceBreakdown = useMemo(() => {
+    const type = form.customerType as "seami" | "guest";
+    const items: { name: string; price: number | null; negotiable: boolean; notServed: boolean }[] = [];
+    let total = 0;
+    let hasNegotiable = false;
+    let hasNotServed = false;
+
+    for (const s of form.services) {
+      const info = pricingMap[s];
+      if (!info) continue;
+      const price = info[type];
+      const notServed = price === null;
+      if (notServed) hasNotServed = true;
+      if (info.negotiable) hasNegotiable = true;
+      if (price !== null && !info.negotiable) total += price;
+      items.push({ name: s, price, negotiable: info.negotiable, notServed });
+    }
+
+    return { items, total, hasNegotiable, hasNotServed };
+  }, [form.services, form.customerType]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,11 +109,16 @@ const FormSection = () => {
     setIsSubmitting(true);
     try {
       const { data, error } = await supabase.functions.invoke("create-clickup-task", {
-        body: form,
+        body: {
+          ...form,
+          estimatedTotal: priceBreakdown.total,
+          hasNegotiableItems: priceBreakdown.hasNegotiable,
+        },
       });
       if (error) throw error;
       toast({ title: "Đã gửi yêu cầu thành công!", description: "SEAMI sẽ liên hệ bạn sớm nhất." });
       setForm({ name: "", phone: "", customerType: "seami", services: [], purposes: [], deadline: "", note: "" });
+      setConfirmed(false);
     } catch (err) {
       console.error("Submit error:", err);
       toast({ title: "Gửi yêu cầu thất bại", description: "Vui lòng thử lại sau.", variant: "destructive" });
@@ -113,7 +173,7 @@ const FormSection = () => {
                 <button
                   key={opt.value}
                   type="button"
-                  onClick={() => setForm({ ...form, customerType: opt.value })}
+                  onClick={() => updateCustomerType(opt.value)}
                   className={`px-5 py-2.5 rounded-lg border font-body text-sm transition-colors ${
                     form.customerType === opt.value
                       ? "bg-primary text-primary-foreground border-primary"
@@ -137,9 +197,7 @@ const FormSection = () => {
                 >
                   <Checkbox
                     checked={form.services.includes(s)}
-                    onCheckedChange={() =>
-                      setForm({ ...form, services: toggleItem(form.services, s) })
-                    }
+                    onCheckedChange={() => updateServices(toggleItem(form.services, s))}
                   />
                   <span className="font-body text-sm text-muted-foreground group-hover:text-foreground transition-colors">
                     {s}
@@ -148,6 +206,56 @@ const FormSection = () => {
               ))}
             </div>
           </div>
+
+          {/* Price breakdown */}
+          {form.services.length > 0 && (
+            <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+              <h3 className="font-display font-semibold text-base">Báo giá tạm tính</h3>
+              <div className="space-y-2">
+                {priceBreakdown.items.map((item) => (
+                  <div key={item.name} className="flex justify-between items-center font-body text-sm">
+                    <span className="text-muted-foreground">{item.name}</span>
+                    <span className="font-medium">
+                      {item.notServed ? (
+                        <span className="text-destructive">Không phục vụ</span>
+                      ) : item.negotiable ? (
+                        <span className="text-muted-foreground italic">từ {formatVND(item.price!)} ↑ thương lượng</span>
+                      ) : (
+                        <span>từ {formatVND(item.price!)}</span>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="border-t border-border pt-3 flex justify-between items-center">
+                <span className="font-body font-semibold">Tổng tạm tính</span>
+                <span className="font-display text-xl font-bold text-primary">
+                  {priceBreakdown.total > 0 ? formatVND(priceBreakdown.total) : "—"}
+                  {priceBreakdown.hasNegotiable && " +"}
+                </span>
+              </div>
+              {priceBreakdown.hasNotServed && (
+                <p className="text-xs text-destructive font-body">
+                  ⚠ Một số dịch vụ không phục vụ cho nhóm khách hàng này
+                </p>
+              )}
+              <p className="text-xs text-muted-foreground font-body italic">
+                * Giá tối thiểu, có thể thay đổi tùy độ khó bài
+              </p>
+
+              {/* Confirmation checkbox */}
+              <label className="flex items-start gap-3 cursor-pointer pt-2">
+                <Checkbox
+                  checked={confirmed}
+                  onCheckedChange={(v) => setConfirmed(v === true)}
+                  className="mt-0.5"
+                />
+                <span className="font-body text-sm text-foreground">
+                  Tôi đã xem và đồng ý với báo giá tạm tính này
+                </span>
+              </label>
+            </div>
+          )}
 
           {/* Purpose */}
           <div className="space-y-3">
@@ -196,7 +304,7 @@ const FormSection = () => {
 
           <Button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || (form.services.length > 0 && !confirmed)}
             className="w-full py-6 text-base font-body font-semibold bg-primary text-primary-foreground hover:opacity-90"
           >
             {isSubmitting ? "Đang gửi..." : "Gửi yêu cầu – Nhận tư vấn từ SEAMI"}

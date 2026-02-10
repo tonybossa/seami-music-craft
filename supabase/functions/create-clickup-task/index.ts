@@ -22,7 +22,7 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    const { name, phone, customerType, services, purposes, deadline, note } = body;
+    const { name, phone, customerType, services, purposes, deadline, note, estimatedTotal, hasNegotiableItems } = body;
 
     if (!name || !phone || !services || services.length === 0) {
       return new Response(
@@ -33,11 +33,16 @@ serve(async (req) => {
 
     const customerLabel = customerType === "seami" ? "GV/HV SEAMI" : "Khách vãng lai";
     
+    const formattedTotal = estimatedTotal
+      ? new Intl.NumberFormat("vi-VN").format(estimatedTotal) + "đ"
+      : "Chưa có";
+
     const description = [
       `**Họ tên:** ${name}`,
       `**SĐT:** ${phone}`,
       `**Nhóm KH:** ${customerLabel}`,
       `**Dịch vụ:** ${services.join(", ")}`,
+      `**Báo giá tạm tính:** ${formattedTotal}${hasNegotiableItems ? " (có hạng mục thương lượng)" : ""}`,
       purposes?.length ? `**Mục đích:** ${purposes.join(", ")}` : null,
       deadline ? `**Deadline:** ${deadline}` : null,
       note ? `**Ghi chú:** ${note}` : null,
