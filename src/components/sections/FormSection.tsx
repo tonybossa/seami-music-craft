@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { supabase } from "@/integrations/supabase/client";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
@@ -51,11 +52,19 @@ const FormSection = () => {
     }
 
     setIsSubmitting(true);
-    // TODO: integrate ClickUp edge function
-    await new Promise((r) => setTimeout(r, 1000));
-    toast({ title: "Đã gửi yêu cầu thành công!", description: "SEAMI sẽ liên hệ bạn sớm nhất." });
-    setForm({ name: "", phone: "", customerType: "seami", services: [], purposes: [], deadline: "", note: "" });
-    setIsSubmitting(false);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-clickup-task", {
+        body: form,
+      });
+      if (error) throw error;
+      toast({ title: "Đã gửi yêu cầu thành công!", description: "SEAMI sẽ liên hệ bạn sớm nhất." });
+      setForm({ name: "", phone: "", customerType: "seami", services: [], purposes: [], deadline: "", note: "" });
+    } catch (err) {
+      console.error("Submit error:", err);
+      toast({ title: "Gửi yêu cầu thất bại", description: "Vui lòng thử lại sau.", variant: "destructive" });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
