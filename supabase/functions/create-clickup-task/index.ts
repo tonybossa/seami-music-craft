@@ -54,7 +54,6 @@ serve(async (req) => {
         body: JSON.stringify({
           name: `[Lead] ${name} – ${customerLabel}`,
           description,
-          status: "to do",
         }),
       }
     );
