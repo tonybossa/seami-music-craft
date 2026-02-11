@@ -1,18 +1,20 @@
-import { BookOpen, Users, Mic } from "lucide-react";
+import usecaseTeaching from "@/assets/usecase-teaching.jpg";
+import usecaseBand from "@/assets/usecase-band.jpg";
+import usecasePerform from "@/assets/usecase-perform.jpg";
 
 const useCases = [
   {
-    icon: BookOpen,
+    image: usecaseTeaching,
     title: "Dạy học",
     description: "Sheet & track đủ rõ ràng, chính xác để đứng lớp — không cần chỉnh sửa thêm.",
   },
   {
-    icon: Users,
+    image: usecaseBand,
     title: "Tập band",
     description: "Phổ & track giúp band vào là tập — mỗi thành viên biết phần mình ngay.",
   },
   {
-    icon: Mic,
+    image: usecasePerform,
     title: "Biểu diễn / Demo",
     description: "Tài liệu đủ chuẩn để diễn live hoặc ghi demo chuyên nghiệp.",
   },
@@ -32,13 +34,23 @@ const UseCasesSection = () => {
           {useCases.map((item) => (
             <div
               key={item.title}
-              className="bg-card border border-border rounded-xl p-8 hover:border-primary/30 transition-colors"
+              className="bg-card border border-border rounded-xl overflow-hidden hover:border-primary/30 transition-colors group"
             >
-              <item.icon className="w-10 h-10 text-primary mb-6" />
-              <h3 className="text-xl font-display font-bold mb-3">{item.title}</h3>
-              <p className="text-muted-foreground font-body font-light leading-relaxed">
-                {item.description}
-              </p>
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-display font-bold mb-3">{item.title}</h3>
+                <p className="text-muted-foreground font-body font-light leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>

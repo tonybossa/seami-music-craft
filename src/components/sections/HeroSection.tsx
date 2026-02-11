@@ -1,4 +1,4 @@
-import { Music, Users, Mic } from "lucide-react";
+import heroBg from "@/assets/hero-bg.jpg";
 
 const HeroSection = () => {
   const scrollTo = (id: string) => {
@@ -7,7 +7,16 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center px-6 py-24">
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-secondary/30" />
+      <div className="absolute inset-0">
+        <img
+          src={heroBg}
+          alt="SEAMI live performance"
+          className="w-full h-full object-cover"
+          loading="eager"
+        />
+        <div className="absolute inset-0 bg-background/75" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-background" />
+      </div>
       <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
         <p className="text-primary font-body text-sm tracking-[0.3em] uppercase">
           SEAMI Music Production Support
@@ -29,7 +38,7 @@ const HeroSection = () => {
           </button>
           <button
             onClick={() => scrollTo("pricing")}
-            className="px-8 py-4 border border-border text-foreground font-body font-medium rounded-lg hover:bg-secondary transition-colors text-base"
+            className="px-8 py-4 border border-border text-foreground font-body font-medium rounded-lg hover:bg-secondary transition-colors text-base backdrop-blur-sm"
           >
             Xem dịch vụ & giá
           </button>
