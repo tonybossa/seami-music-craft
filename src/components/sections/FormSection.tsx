@@ -50,6 +50,8 @@ const FormSection = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+  const [formLoadedAt] = useState(() => Date.now());
+  const [honeypot, setHoneypot] = useState("");
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -113,6 +115,8 @@ const FormSection = () => {
           ...form,
           estimatedTotal: priceBreakdown.total,
           hasNegotiableItems: priceBreakdown.hasNegotiable,
+          _hp: honeypot,
+          _ts: formLoadedAt,
         },
       });
       if (error) throw error;
@@ -138,6 +142,17 @@ const FormSection = () => {
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Honeypot - hidden from real users */}
+          <div className="absolute opacity-0 -z-10 pointer-events-none" aria-hidden="true" tabIndex={-1}>
+            <input
+              type="text"
+              name="website"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
           {/* Name & Phone */}
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
