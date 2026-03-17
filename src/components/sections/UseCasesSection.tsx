@@ -22,7 +22,7 @@ const useCases = [
 
 const UseCasesSection = () => {
   return (
-    <section className="px-6 py-24">
+    <section aria-label="Các trường hợp sử dụng dịch vụ SEAMI" className="px-6 py-24">
       <div className="max-w-5xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-display font-bold text-center mb-4">
           Dịch vụ này dùng để làm gì?
