@@ -132,7 +132,7 @@ const FormSection = () => {
   };
 
   return (
-    <section id="form" className="px-6 py-24 bg-secondary/20">
+    <section id="form" aria-label="Form gửi yêu cầu đặt dịch vụ" className="px-6 py-24 bg-secondary/20">
       <div className="max-w-2xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-display font-bold text-center mb-4">
           Gửi yêu cầu

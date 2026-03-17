@@ -50,7 +50,7 @@ const PriceTable = ({ data }: { data: { name: string; seami: string; guest: stri
 
 const PricingSection = () => {
   return (
-    <section id="pricing" className="px-6 py-24">
+    <section id="pricing" aria-label="Bảng giá dịch vụ SEAMI" className="px-6 py-24">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-display font-bold text-center mb-4">
           Dịch vụ & Bảng Giá
