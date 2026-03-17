@@ -6,11 +6,11 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-6 py-24">
+    <header aria-label="Giới thiệu SEAMI Music Production Support" className="relative min-h-screen flex items-center justify-center px-6 py-24">
       <div className="absolute inset-0">
         <img
           src={heroBg}
-          alt="SEAMI live performance"
+          alt="Buổi biểu diễn nhạc sống tại SEAMI với ban nhạc và ánh sáng sân khấu"
           className="w-full h-full object-cover"
           loading="eager"
         />
@@ -29,7 +29,7 @@ const HeroSection = () => {
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-body font-light leading-relaxed">
           Dành cho người làm nhạc cần tài liệu dùng được ngay cho dạy học, tập band và biểu diễn.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+        <nav aria-label="Hành động chính" className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
           <button
             onClick={() => scrollTo("form")}
             className="px-8 py-4 bg-primary text-primary-foreground font-body font-semibold rounded-lg hover:opacity-90 transition-opacity text-base"
@@ -42,9 +42,9 @@ const HeroSection = () => {
           >
             Xem dịch vụ & giá
           </button>
-        </div>
+        </nav>
       </div>
-    </section>
+    </header>
   );
 };
 

@@ -20,7 +20,7 @@ const audiences = [
 
 const AudienceSection = () => {
   return (
-    <section className="px-6 py-24 bg-secondary/20">
+    <section aria-label="Đối tượng khách hàng phù hợp" className="px-6 py-24 bg-secondary/20">
       <div className="max-w-5xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-display font-bold text-center mb-4">
           Ai nên dùng dịch vụ này?

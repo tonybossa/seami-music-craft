@@ -30,7 +30,7 @@ const WhyUsSection = () => {
           <div className="relative rounded-xl overflow-hidden aspect-square">
             <img
               src={whyusBg}
-              alt="SEAMI music teaching"
+              alt="Giảng viên SEAMI đang hướng dẫn học viên trong phòng thu âm chuyên nghiệp"
               className="w-full h-full object-cover"
               loading="lazy"
             />

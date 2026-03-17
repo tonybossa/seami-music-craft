@@ -39,7 +39,7 @@ const UseCasesSection = () => {
               <div className="relative h-48 overflow-hidden">
                 <img
                   src={item.image}
-                  alt={item.title}
+                  alt={`SEAMI hỗ trợ ${item.title.toLowerCase()} — ${item.description}`}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
