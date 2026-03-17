@@ -1,59 +1,57 @@
 
 
-# Tính tổng giá & xác nhận trước khi gửi form
+## Tối ưu SEO & AEO cho SEAMI Landing Page
 
-## Mô tả
-Khi khách chọn dịch vụ trong form, hệ thống sẽ tự động tính và hiển thị **tổng giá tạm tính** dựa trên nhóm khách hàng (SEAMI / Vãng lai). Khách phải **xác nhận giá** trước khi form được gửi đi.
+### Hiện trạng
+- `index.html`: meta tags vẫn còn mặc định ("Lovable App"), thiếu structured data, thiếu canonical, thiếu hreflang
+- Không có `sitemap.xml`
+- `robots.txt` chưa trỏ sitemap
+- Không có JSON-LD structured data (quan trọng cho AEO — giúp AI search engines hiểu nội dung)
+- Các section thiếu semantic HTML tags (`article`, `nav`, `header`, `footer` semantic)
+- Thiếu FAQ schema cho phần pricing/policies (giúp hiển thị rich snippets & AI trả lời)
 
-## Cách hoạt động
+### Kế hoạch thực hiện
 
-1. **Chọn dịch vụ** -- mỗi khi tick/bỏ tick, tổng giá cập nhật ngay
-2. **Chuyển nhóm khách hàng** -- giá tự tính lại theo bảng giá tương ứng
-3. **Hiển thị bảng tổng kết** -- liệt kê từng dịch vụ đã chọn + giá + tổng cộng
-4. **Nút xác nhận** -- khách tick "Tôi đã xác nhận báo giá tạm tính" rồi mới bấm gửi được
-5. Dịch vụ có giá "thương lượng" hoặc "Không phục vụ" sẽ hiển thị rõ ràng, không cộng vào tổng số
+**1. Cập nhật `index.html` — Meta tags đầy đủ**
+- Title: "SEAMI | Hỗ trợ Sheet & Track theo Chuẩn Nghề"
+- Description: mô tả dịch vụ bằng tiếng Việt, ~155 ký tự
+- `lang="vi"` thay vì `"en"`
+- Canonical URL trỏ về `https://seami-music-craft.lovable.app`
+- Open Graph & Twitter cards cập nhật đúng brand
+- Thêm `<link rel="sitemap">` 
 
-## Bảng giá tối thiểu (dùng trong code)
+**2. Tạo `public/sitemap.xml`**
+- Liệt kê URL chính (`/`) với `lastmod`, `priority`
 
-| Dịch vụ | SEAMI | Khách vãng lai |
-|---|---|---|
-| Sheet giai điệu / chép lại | 100,000 | 150,000 |
-| Dien hop am | 50,000 | 50,000 |
-| Sheet piano / Tab guitar | 300,000 | 400,000 |
-| Pho gian luoc | 400,000 | 600,000 |
-| Tong pho nhac nhe | 2,000,000 (thuong luong) | 2,500,000 (thuong luong) |
-| Pho hop xuong SATB | 1,500,000 | 2,000,000 |
-| Track 1-2 line | 500,000 | 800,000 |
-| Track full band | 2,000,000 (thuong luong) | 2,500,000 (thuong luong) |
-| Raw multitrack | 2,000,000 (thuong luong) | 2,500,000 (thuong luong) |
-| Tach vocal | 50,000 | null (khong phuc vu) |
-| Video guide melody | 80,000 | 100,000 |
+**3. Cập nhật `public/robots.txt`**
+- Thêm dòng `Sitemap: https://seami-music-craft.lovable.app/sitemap.xml`
+- Thêm AI crawlers: `GPTBot`, `Google-Extended`, `ChatGPT-User`, `Bytespider`, `PerplexityBot`
 
-## Chi tiet ky thuat
+**4. Thêm JSON-LD Structured Data (trọng tâm AEO)**
+Tạo component `SEOStructuredData.tsx` inject vào `<head>` qua `react-helmet-async`:
+- **LocalBusiness** schema: tên, mô tả, dịch vụ, khu vực phục vụ
+- **Service** schema: liệt kê từng dịch vụ với giá (dùng `Offer`)
+- **FAQPage** schema: chuyển phần "Ai nên dùng?" và policies thành FAQ format — giúp AI engines trích xuất câu trả lời trực tiếp
+- **BreadcrumbList** schema
 
-### Thay doi trong `FormSection.tsx`
+**5. Cải thiện semantic HTML trong các section**
+- `HeroSection`: wrap trong `<header>`
+- `FooterSection`: đã dùng `<footer>` ✓
+- Thêm `aria-label` cho các section chính
+- Đảm bảo heading hierarchy đúng (h1 → h2 → h3)
+- Thêm `alt` text mô tả chi tiết hơn cho images
 
-1. **Them pricing map** -- object map tu ten dich vu sang `{ seami: number | null, guest: number | null, negotiable: boolean }`
+**6. Thêm FAQ Section mới**
+- Section FAQ riêng với các câu hỏi thường gặp (giá, quy trình, deadline)
+- Dùng `<details>`/`<summary>` hoặc Accordion có semantic đúng
+- Đồng bộ với FAQPage JSON-LD schema
 
-2. **Them ham `calculateTotal`** -- duyet qua `form.services`, tra gia theo `form.customerType`, cong tong. Tach rieng danh sach "thuong luong" va "khong phuc vu".
+### Cài đặt thêm
+- Package: `react-helmet-async` để quản lý `<head>` tags từ React
 
-3. **Them khu vuc hien thi gia** -- xuat hien khi `form.services.length > 0`:
-   - Danh sach tung dich vu da chon + gia tuong ung
-   - Ghi chu "Thuong luong" cho cac dich vu khong co gia co dinh
-   - Ghi chu "Khong phuc vu" neu khach vang lai chon "Tach vocal"
-   - Dong tong cong in dam, font lon
-   - Ghi chu "*Gia toi thieu, co the thay doi tuy do kho bai"
-
-4. **Them state `confirmed`** -- boolean, reset ve `false` moi khi `services` hoac `customerType` thay doi
-
-5. **Them checkbox xac nhan** -- "Toi da xem va dong y voi bao gia tam tinh nay"
-
-6. **Disable nut gui** -- khi `confirmed === false` hoac chua chon dich vu
-
-7. **Gui kem tong gia trong form data** -- body gui len edge function se co them `estimatedTotal` va `hasNegotiableItems` de hien thi tren ClickUp task
-
-### Thay doi trong edge function `create-clickup-task/index.ts`
-
-- Nhan them `estimatedTotal` va `hasNegotiableItems` tu body
-- Hien thi trong description cua ClickUp task: "Bao gia tam tinh: X dong" va ghi chu neu co hang muc thuong luong
+### Chi tiết kỹ thuật
+- JSON-LD được inject qua `<script type="application/ld+json">` trong `<Helmet>`
+- FAQPage schema giúp Google hiển thị rich snippets và AI search (Gemini, ChatGPT, Perplexity) trích xuất câu trả lời
+- Service + Offer schema giúp hiển thị giá trong search results
+- Tất cả structured data validate được qua Google Rich Results Test
 
